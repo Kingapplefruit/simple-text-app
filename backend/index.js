@@ -1,0 +1,28 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const { PrismaClient } = require('@prisma/client');
+
+const app = express();
+const prisma = new PrismaClient();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+
+app.post('/submit', async (req, res) => {
+  const { text } = req.body;
+  if (!text) return res.status(400).json({ error: 'Text is required' });
+
+  try {
+    const saved = await prisma.text.create({ data: { content: text } });
+    res.status(201).json(saved);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to save text' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
