@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-
+// to see if db connected
 prisma.$connect()
   .then(() => {
     console.log("✅ Successfully connected to Supabase database.");
@@ -20,7 +20,7 @@ prisma.$connect()
     console.error(err);
     process.exit(1); // exit if connection fails
   });
-
+// api endpoint to recieve req from frontend (dont change at all)
 app.post('/submit', async (req, res) => {
   const { text } = req.body;
   if (!text) return res.status(400).json({ error: 'Text is required' });
@@ -34,6 +34,7 @@ app.post('/submit', async (req, res) => {
   }
 });
 
+// dont change listening on all ports
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
